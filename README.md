@@ -1,2 +1,2 @@
-# bookmark-manager
+# Metora Bookmarks
 Personalised Bookmark Manager
