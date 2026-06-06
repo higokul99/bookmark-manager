@@ -28,6 +28,21 @@ if ($action === 'create') {
         $stmt->bindParam(':url', $url);
         $stmt->execute();
     }
+} elseif ($action === 'update') {
+    $bookmarkId = $_POST['bookmark_id'] ?? '';
+    $categoryId = $_POST['category_id'] ?? '';
+    $title = $_POST['title'] ?? '';
+    $url = $_POST['url'] ?? '';
+    
+    if (is_numeric($bookmarkId) && is_numeric($categoryId) && strlen($title) > 0 && strlen($url) > 0) {
+        $stmt = $pdo->prepare("UPDATE bookmarks SET category_id = :category_id, title = :title, url = :url WHERE id = :bookmark_id AND user_id = :user_id");
+        $stmt->bindParam(':bookmark_id', $bookmarkId, PDO::PARAM_INT);
+        $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':url', $url);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
 } elseif ($action === 'delete') {
     $bookmarkId = $_POST['bookmark_id'] ?? '';
     

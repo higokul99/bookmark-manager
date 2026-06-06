@@ -17,11 +17,25 @@ $action = $_POST['action'] ?? '';
 
 if ($action === 'create') {
     $name = $_POST['name'] ?? '';
+    $parentId = $_POST['parent_id'] ?? '';
     
     if (strlen($name) > 0) {
-        $stmt = $pdo->prepare("INSERT INTO categories (user_id, name, category_id) VALUES (:user_id, :name, NULL)");
+        $categoryIdValue = !empty($parentId) ? $parentId : null;
+        $stmt = $pdo->prepare("INSERT INTO categories (user_id, name, category_id) VALUES (:user_id, :name, :category_id)");
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
         $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':category_id', $categoryIdValue, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+} elseif ($action === 'update') {
+    $categoryId = $_POST['category_id'] ?? '';
+    $name = $_POST['name'] ?? '';
+    
+    if (is_numeric($categoryId) && strlen($name) > 0) {
+        $stmt = $pdo->prepare("UPDATE categories SET name = :name WHERE id = :category_id AND user_id = :user_id");
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
         $stmt->execute();
     }
 } elseif ($action === 'delete') {

@@ -1,7 +1,8 @@
 # Artificial Intelligence Instructions for bookmark-manager
 
 You are an expert developer building a self-hosted Bookmark Manager ("Metora Bookmarks") using Core PHP, MySQL (PDO), Vanilla JavaScript, and Tailwind CSS. Always refer to `sdd-core.md` and `sdd-ui-ux.md` before writing code.
-
+## Must follow rules
+1. As soon as you edit a logic, functionality, feature, or design, you must update the corresponding `sdd-core.md` or `sdd-ui-ux.md` file.
 ## Core Architectural Rules
 1. **No Frameworks:** Use absolute raw, core PHP. Do not install Composer or third-party PHP libraries unless explicitly requested.
 2. **Security First:** 

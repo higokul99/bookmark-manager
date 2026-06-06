@@ -34,15 +34,37 @@ CREATE TABLE bookmarks (
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-3. Core Processing Workflows
-4-PIN Security Architecture
+## 2. Core Features
+
+### 2.1 User Management
+- Admin can create/delete users via admin portal
+- Users authenticate with 4-digit PIN (no username required)
+- Session lockout after 3 failed login attempts (5 minutes)
+
+### 2.2 Category Management
+- Create main categories
+- Create subcategories (nested under main categories)
+- Edit category names
+- Delete categories (deletes all bookmarks inside)
+- Pin/unpin categories (pinned categories show first)
+- Collapsible category UI (collapsed by default)
+
+### 2.3 Bookmark Management
+- Add bookmarks to any category/subcategory
+- Edit bookmark title, URL, and category
+- Delete bookmarks
+- Bookmarks sorted by creation date (newest first)
+
+## 3. Core Processing Workflows
+
+### 3.1 PIN Security Architecture
 Regular user authorization utilizes actions/auth_verify.php. Users authenticate using only a 4-digit PIN (no username required).
 
 A session tracker $_SESSION['login_attempts'] must increment on failure.
 
 If failure count hits 3, save a timestamp $_SESSION['lockout_time']. Block verification routines until current_time minus lockout_time exceeds 300 seconds.
 
-Sorting Priority Logic
+### 3.2 Sorting Priority Logic
 When rendering interface components, execute strict MySQL ordering logic:
 
 SELECT * FROM categories 
@@ -54,5 +76,5 @@ WHERE user_id = :user_id AND category_id = :category_id
 ORDER BY name ASC;
 
 SELECT * FROM bookmarks 
-WHERE user_id = :user_id AND category_id = :category_id 
+WHERE user_id = :user_id 
 ORDER BY id DESC;
