@@ -1,12 +1,12 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once '../../config/db.php';
 
 header('Content-Type: application/json');
 
 // Logging function
 function logLoginAction($message) {
-    $logFile = '../logs/login.log';
+    $logFile = '../../logs/login.log';
     $timestamp = date('Y-m-d H:i:s');
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
     $logEntry = "[{$timestamp}] [IP: {$ip}] {$message}\n";

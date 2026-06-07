@@ -9,7 +9,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 require_once '../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    header('Location: ../actions/admin_user_crud.php');
+    header('Location: ../public/actions/admin_user_crud.php');
     exit;
 }
 
@@ -29,7 +29,7 @@ require_once '../includes/header.php';
         
         <div class="glass rounded-2xl p-6 mb-6">
             <h2 class="text-xl font-semibold mb-4">Create New User</h2>
-            <form action="../actions/admin_user_crud.php" method="POST" class="flex gap-4">
+            <form action="../public/actions/admin_user_crud.php" method="POST" class="flex gap-4">
                 <input type="hidden" name="action" value="create">
                 <div class="flex-1">
                     <input type="text" name="username" placeholder="Username" required
@@ -55,7 +55,7 @@ require_once '../includes/header.php';
                             <div class="font-medium"><?= htmlspecialchars($user['username']) ?></div>
                             <div class="text-sm text-gray-400">Created: <?= $user['created_at'] ?></div>
                         </div>
-                        <form action="../actions/admin_user_crud.php" method="POST" class="inline">
+                        <form action="../public/actions/admin_user_crud.php" method="POST" class="inline">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
                             <button type="submit"

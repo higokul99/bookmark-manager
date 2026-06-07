@@ -47,7 +47,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
     lockoutMessage.classList.add('hidden');
     
     try {
-        const response = await fetch('../actions/auth_verify.php', {
+        const response = await fetch('actions/auth_verify.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({

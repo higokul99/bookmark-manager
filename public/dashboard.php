@@ -339,7 +339,7 @@ document.getElementById('toggle-edit').addEventListener('click', async function(
     editMode = !editMode;
     
     try {
-        const response = await fetch('../actions/toggle_edit.php', {
+        const response = await fetch('actions/toggle_edit.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ edit_mode: editMode })
@@ -372,7 +372,7 @@ document.getElementById('add-category-form').addEventListener('submit', async fu
     formData.set('action', 'create');
     
     try {
-        const response = await fetch('../actions/category_crud.php', {
+        const response = await fetch('actions/category_crud.php', {
             method: 'POST',
             body: formData
         });
@@ -388,7 +388,7 @@ document.getElementById('add-bookmark-form').addEventListener('submit', async fu
     formData.set('action', 'create');
     
     try {
-        const response = await fetch('../actions/bookmark_crud.php', {
+        const response = await fetch('actions/bookmark_crud.php', {
             method: 'POST',
             body: formData
         });
@@ -404,7 +404,7 @@ document.getElementById('edit-bookmark-form').addEventListener('submit', async f
     formData.set('action', 'update');
     
     try {
-        const response = await fetch('../actions/bookmark_crud.php', {
+        const response = await fetch('actions/bookmark_crud.php', {
             method: 'POST',
             body: formData
         });
@@ -420,7 +420,7 @@ document.getElementById('edit-category-form').addEventListener('submit', async f
     formData.set('action', 'update');
     
     try {
-        const response = await fetch('../actions/category_crud.php', {
+        const response = await fetch('actions/category_crud.php', {
             method: 'POST',
             body: formData
         });
@@ -439,7 +439,7 @@ document.querySelectorAll('.delete-category-btn').forEach(btn => {
         formData.set('category_id', this.dataset.categoryId);
         
         try {
-            await fetch('../actions/category_crud.php', { method: 'POST', body: formData });
+            await fetch('actions/category_crud.php', { method: 'POST', body: formData });
             window.location.reload();
         } catch (err) {
             console.error(err);
@@ -454,7 +454,7 @@ document.querySelectorAll('.pin-btn').forEach(btn => {
         formData.set('category_id', this.dataset.categoryId);
         
         try {
-            await fetch('../actions/category_crud.php', { method: 'POST', body: formData });
+            await fetch('actions/category_crud.php', { method: 'POST', body: formData });
             window.location.reload();
         } catch (err) {
             console.error(err);
@@ -471,7 +471,7 @@ document.querySelectorAll('.delete-bookmark-btn').forEach(btn => {
         formData.set('bookmark_id', this.dataset.bookmarkId);
         
         try {
-            await fetch('../actions/bookmark_crud.php', { method: 'POST', body: formData });
+            await fetch('actions/bookmark_crud.php', { method: 'POST', body: formData });
             window.location.reload();
         } catch (err) {
             console.error(err);
