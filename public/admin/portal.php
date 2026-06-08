@@ -6,17 +6,17 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit;
 }
 
-require_once '../config/db.php';
+require_once '../../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    header('Location: ../public/actions/admin_user_crud.php');
+    header('Location: ../actions/admin_user_crud.php');
     exit;
 }
 
 $stmt = $pdo->query("SELECT * FROM users ORDER BY created_at DESC");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-require_once '../includes/header.php';
+require_once '../../includes/header.php';
 ?>
 <div class="min-h-screen p-6">
     <div class="max-w-4xl mx-auto">
@@ -29,7 +29,7 @@ require_once '../includes/header.php';
         
         <div class="glass rounded-2xl p-6 mb-6">
             <h2 class="text-xl font-semibold mb-4">Create New User</h2>
-            <form action="../public/actions/admin_user_crud.php" method="POST" class="flex gap-4">
+            <form action="../actions/admin_user_crud.php" method="POST" class="flex gap-4">
                 <input type="hidden" name="action" value="create">
                 <div class="flex-1">
                     <input type="text" name="username" placeholder="Username" required
@@ -69,4 +69,4 @@ require_once '../includes/header.php';
         </div>
     </div>
 </div>
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

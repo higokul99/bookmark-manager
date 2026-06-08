@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-require_once '../includes/header.php';
+require_once '../../includes/header.php';
 ?>
 <div class="min-h-screen flex items-center justify-center p-4">
     <div class="glass rounded-2xl p-8 max-w-md w-full">
@@ -43,4 +43,4 @@ require_once '../includes/header.php';
         </form>
     </div>
 </div>
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>
