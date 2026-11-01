@@ -19,12 +19,15 @@ if ($action === 'create') {
     $name = $_POST['name'] ?? '';
     $parentId = $_POST['parent_id'] ?? '';
     
-    if (strlen($name) > 0) {
-        $categoryIdValue = !empty($parentId) ? $parentId : null;
+    if (strlen(trim($name)) > 0) {
         $stmt = $pdo->prepare("INSERT INTO categories (user_id, name, category_id) VALUES (:user_id, :name, :category_id)");
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
         $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':category_id', $categoryIdValue, PDO::PARAM_INT);
+        if (!empty($parentId)) {
+            $stmt->bindValue(':category_id', (int)$parentId, PDO::PARAM_INT);
+        } else {
+            $stmt->bindValue(':category_id', null, PDO::PARAM_NULL);
+        }
         $stmt->execute();
     }
 } elseif ($action === 'update') {
@@ -69,5 +72,5 @@ if ($action === 'create') {
     }
 }
 
-header('Location: ../public/dashboard.php');
+header('Location: ../dashboard.php');
 exit;

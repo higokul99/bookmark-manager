@@ -54,5 +54,5 @@ if ($action === 'create') {
     }
 }
 
-header('Location: ../public/dashboard.php');
+header('Location: ../dashboard.php');
 exit;

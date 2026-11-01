@@ -59,10 +59,12 @@ CREATE TABLE bookmarks (
 
 ### 3.1 PIN Security Architecture
 Regular user authorization utilizes actions/auth_verify.php. Users authenticate using only a 4-digit PIN (no username required).
-
-A session tracker $_SESSION['login_attempts'] must increment on failure.
-
-If failure count hits 3, save a timestamp $_SESSION['lockout_time']. Block verification routines until current_time minus lockout_time exceeds 300 seconds.
+- Input is validated to ensure it is exactly 4 digits.
+- If no users exist in the database, auth endpoint informs the user to create an account in the Admin Portal without incrementing failure attempts.
+- A session tracker $_SESSION['login_attempts'] must increment on invalid PIN failure.
+- If failure count hits 3, save a timestamp $_SESSION['lockout_time']. Block verification routines until current_time minus lockout_time exceeds 300 seconds.
+- All login attempts (success, invalid pin, lockout, format errors) are logged to `logs/login.log`.
+- Database errors return HTTP 500 JSON to API endpoints for graceful client-side display.
 
 ### 3.2 Sorting Priority Logic
 When rendering interface components, execute strict MySQL ordering logic:

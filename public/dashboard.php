@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../config/db.php';
 
 $userId = $_SESSION['user_id'];
+$editMode = !empty($_SESSION['edit_mode']);
 
 // Fetch all categories
 $stmt = $pdo->prepare("SELECT * FROM categories WHERE user_id = :user_id ORDER BY is_pinned DESC, name ASC");
@@ -46,8 +47,8 @@ require_once '../includes/header.php';
             </div>
             <div class="flex gap-4">
                 <button id="toggle-edit"
-                    class="px-4 py-2 border border-white/20 rounded-lg hover:bg-white/10 transition">
-                    Edit Mode
+                    class="px-4 py-2 border <?= $editMode ? 'border-yellow-400' : 'border-white/20' ?> rounded-lg hover:bg-white/10 transition">
+                    <?= $editMode ? 'Exit Edit Mode' : 'Edit Mode' ?>
                 </button>
                 <a href="login.php?logout=1"
                     class="px-4 py-2 border border-white/20 rounded-lg hover:bg-white/10 transition">
@@ -56,7 +57,7 @@ require_once '../includes/header.php';
             </div>
         </div>
 
-        <div id="edit-panel" class="glass rounded-2xl p-6 mb-8 hidden">
+        <div id="edit-panel" class="glass rounded-2xl p-6 mb-8 <?= $editMode ? '' : 'hidden' ?>">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <h3 class="font-semibold mb-3">Add Category</h3>
@@ -168,14 +169,14 @@ require_once '../includes/header.php';
                         <div class="flex-1">
                             <h2 class="text-xl font-semibold flex items-center gap-2 cursor-pointer"
                                 onclick="toggleCategory(<?= $mainCat['id'] ?>)">
-                                <span class="toggle-icon transition-transform" id="toggle-icon-<?= $mainCat['id'] ?>">▶</span>
+                                <span class="toggle-icon transition-transform inline-block" id="toggle-icon-<?= $mainCat['id'] ?>">▶</span>
                                 <?php if ($mainCat['is_pinned']): ?>
                                     <span class="accent-yellow">📌</span>
                                 <?php endif; ?>
                                 <?= htmlspecialchars($mainCat['name']) ?>
                             </h2>
                         </div>
-                        <div class="edit-controls hidden flex gap-2 ml-2">
+                        <div class="edit-controls <?= $editMode ? '' : 'hidden' ?> flex gap-2 ml-2">
                             <button class="edit-category-btn text-blue-400 hover:text-blue-300"
                                 data-category-id="<?= $mainCat['id'] ?>"
                                 data-name="<?= htmlspecialchars($mainCat['name']) ?>">
@@ -199,7 +200,7 @@ require_once '../includes/header.php';
                                         class="accent-yellow hover:underline truncate flex-1">
                                         <?= htmlspecialchars($bm['title']) ?>
                                     </a>
-                                    <div class="edit-controls hidden flex gap-2 ml-2">
+                                    <div class="edit-controls <?= $editMode ? '' : 'hidden' ?> flex gap-2 ml-2">
                                         <button class="edit-bookmark-btn text-blue-400 hover:text-blue-300"
                                             data-bookmark-id="<?= $bm['id'] ?>"
                                             data-category-id="<?= $bm['category_id'] ?>"
@@ -225,7 +226,7 @@ require_once '../includes/header.php';
                                             <span class="toggle-icon transition-transform inline-block" id="sub-toggle-icon-<?= $sub['id'] ?>">▶</span>
                                             <?= htmlspecialchars($sub['name']) ?>
                                         </h3>
-                                        <div class="edit-controls hidden flex gap-2">
+                                        <div class="edit-controls <?= $editMode ? '' : 'hidden' ?> flex gap-2">
                                             <button class="edit-category-btn text-blue-400 hover:text-blue-300"
                                                 data-category-id="<?= $sub['id'] ?>"
                                                 data-name="<?= htmlspecialchars($sub['name']) ?>">
@@ -244,7 +245,7 @@ require_once '../includes/header.php';
                                                         class="accent-yellow hover:underline truncate flex-1">
                                                         <?= htmlspecialchars($bm['title']) ?>
                                                     </a>
-                                                    <div class="edit-controls hidden flex gap-2 ml-2">
+                                                    <div class="edit-controls <?= $editMode ? '' : 'hidden' ?> flex gap-2 ml-2">
                                                         <button class="edit-bookmark-btn text-blue-400 hover:text-blue-300"
                                                             data-bookmark-id="<?= $bm['id'] ?>"
                                                             data-category-id="<?= $bm['category_id'] ?>"
@@ -271,7 +272,7 @@ require_once '../includes/header.php';
 </div>
 
 <script>
-let editMode = false;
+let editMode = <?= $editMode ? 'true' : 'false' ?>;
 
 function toggleCategory(categoryId) {
     const content = document.getElementById(`category-${categoryId}`);

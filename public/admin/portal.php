@@ -55,7 +55,7 @@ require_once '../../includes/header.php';
                             <div class="font-medium"><?= htmlspecialchars($user['username']) ?></div>
                             <div class="text-sm text-gray-400">Created: <?= $user['created_at'] ?></div>
                         </div>
-                        <form action="../public/actions/admin_user_crud.php" method="POST" class="inline">
+                        <form action="../actions/admin_user_crud.php" method="POST" class="inline">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
                             <button type="submit"

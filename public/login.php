@@ -49,13 +49,25 @@ document.getElementById('login-form').addEventListener('submit', async function(
     try {
         const response = await fetch('actions/auth_verify.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers: { 
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json'
+            },
             body: new URLSearchParams({
                 pin: document.getElementById('pin').value
             })
         });
         
-        const data = await response.json();
+        let data;
+        const text = await response.text();
+        try {
+            data = JSON.parse(text);
+        } catch (jsonErr) {
+            console.error('Server returned non-JSON response:', text);
+            errorMessage.textContent = text && text.length < 200 ? text : 'Server returned an invalid response. Check database or logs.';
+            errorMessage.classList.remove('hidden');
+            return;
+        }
         
         if (data.success) {
             window.location.href = 'dashboard.php';
@@ -69,6 +81,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
             }
         }
     } catch (err) {
+        console.error('Login error:', err);
         errorMessage.textContent = 'An error occurred. Please try again.';
         errorMessage.classList.remove('hidden');
     }

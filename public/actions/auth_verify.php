@@ -6,11 +6,15 @@ header('Content-Type: application/json');
 
 // Logging function
 function logLoginAction($message) {
-    $logFile = '../../logs/login.log';
+    $logDir = dirname(__DIR__, 2) . '/logs';
+    if (!is_dir($logDir)) {
+        @mkdir($logDir, 0777, true);
+    }
+    $logFile = $logDir . '/login.log';
     $timestamp = date('Y-m-d H:i:s');
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
     $logEntry = "[{$timestamp}] [IP: {$ip}] {$message}\n";
-    file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
+    @file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -31,12 +35,31 @@ if (isset($_SESSION['lockout_time']) && (time() - $_SESSION['lockout_time'] < 30
     exit;
 }
 
-$pin = $_POST['pin'] ?? '';
+$pin = trim($_POST['pin'] ?? '');
 logLoginAction("Login attempt received");
 
-// Get all users and check each pin (since multiple users could have same pin but we'll use first match)
+if (strlen($pin) !== 4 || !ctype_digit($pin)) {
+    logLoginAction("Login attempt rejected: PIN must be 4 digits");
+    echo json_encode([
+        'success' => false,
+        'message' => 'Please enter a valid 4-digit PIN.'
+    ]);
+    exit;
+}
+
+// Get all users and check each pin
 $stmt = $pdo->query("SELECT * FROM users");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (empty($users)) {
+    logLoginAction("Login attempt failed: No users exist in database");
+    echo json_encode([
+        'success' => false,
+        'message' => 'No users found. Please create a user in the Admin Portal (admin/) first.'
+    ]);
+    exit;
+}
+
 $authenticatedUser = null;
 
 foreach ($users as $user) {

@@ -13,7 +13,7 @@ Personalised Bookmark Manager
 ## How to Use
 1. Set up the database using `schema.sql`
 2. Configure database connection in `config/db.php`
-3. Go to `/admin` to create a user (password: Nego@2026)
+3. Go to `/public/admin` to create a user (password: Nego@2026)
 4. Go to `/public` and log in with your PIN
 5. Click "Edit Mode" to start adding categories and bookmarks
 6. Click category names to expand/collapse them
